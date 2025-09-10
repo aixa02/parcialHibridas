@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/aixa02/parcialHibridas/issues"
   },
-  "homepage": "https://github.com/aixa02/parcialHibridas#readme"
+  "homepage": "https://github.com/aixa02/parcialHibridas#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
 }
