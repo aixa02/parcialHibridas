@@ -1,10 +1,10 @@
 import express from "express"
-import ProductosRoute from "./routes/productos.route.js"
-import ProductosApiRoute from "./api/routes/productos.api.routes.js"
+import MedicamentosRoute from "./routes/medicamentos.route.js"
+//import ProductosApiRoute from "./api/routes/productos.api.routes.js"
 const app = express()
-//app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({extended:true}))
 
-//app.use("/productos", ProductosRoute)
+app.use("/medicamentos", MedicamentosRoute)
 //app.use("/api/productos", ProductosApiRoute)
 
 
