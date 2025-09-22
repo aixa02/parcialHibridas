@@ -1,92 +1,74 @@
 [
-    {
-        "id": 1,
-        "nombre": "Ibuprofeno 600mg",
-        "principio_activo": "Ibuprofeno",
-        "descripcion": "Antiinflamatorio no esteroideo para tratar dolor y fiebre.",
-        "categoria": "Antiinflamatorios",
-        "img": "https://picsum.photos/400/225?random=1",
-        "link": "https://anmat.gov.ar/prospectos/ibuprofeno600"
-    },
-    {
-        "id": 2,
-        "nombre": "Paracetamol 500mg",
-        "principio_activo": "Paracetamol",
-        "descripcion": "Analgésico y antipirético utilizado para aliviar dolores leves a moderados.",
-        "categoria": "Analgésicos",
-        "img": "https://picsum.photos/400/225?random=2",
-        "link": "https://anmat.gov.ar/prospectos/paracetamol500"
-    },
-    {
-        "id": 3,
-        "nombre": "Amoxicilina 500mg",
-        "principio_activo": "Amoxicilina",
-        "descripcion": "Antibiótico penicilínico usado para tratar infecciones bacterianas.",
-        "categoria": "Antibióticos",
-        "img": "https://picsum.photos/400/225?random=3",
-        "link": "https://anmat.gov.ar/prospectos/amoxicilina500"
-    },
-    {
-        "id": 4,
-        "nombre": "Enalapril 10mg",
-        "principio_activo": "Enalapril",
-        "descripcion": "Antihipertensivo inhibidor de la enzima convertidora de angiotensina (IECA).",
-        "categoria": "Antihipertensivos",
-        "img": "https://picsum.photos/400/225?random=4",
-        "link": "https://anmat.gov.ar/prospectos/enalapril10"
-    },
-    {
-        "id": 5,
-        "nombre": "Levonorgestrel 0.75mg",
-        "principio_activo": "Levonorgestrel",
-        "descripcion": "Anticonceptivo de emergencia para prevenir el embarazo.",
-        "categoria": "Anticonceptivos",
-        "img": "https://picsum.photos/400/225?random=5",
-        "link": "https://anmat.gov.ar/prospectos/levonorgestrel075"
-    },
-    {
-        "id": 6,
-        "nombre": "Diclofenac 50mg",
-        "principio_activo": "Diclofenac",
-        "descripcion": "Antiinflamatorio no esteroideo indicado para dolores musculares y articulares.",
-        "categoria": "Antiinflamatorios",
-        "img": "https://picsum.photos/400/225?random=6",
-        "link": "https://anmat.gov.ar/prospectos/diclofenac50"
-    },
-    {
-        "id": 7,
-        "nombre": "Clonazepam 2mg",
-        "principio_activo": "Clonazepam",
-        "descripcion": "Ansiolítico y anticonvulsivo de la familia de las benzodiacepinas.",
-        "categoria": "Analgésicos",
-        "img": "https://picsum.photos/400/225?random=7",
-        "link": "https://anmat.gov.ar/prospectos/clonazepam2"
-    },
-    {
-        "id": 8,
-        "nombre": "Ciprofloxacino 500mg",
-        "principio_activo": "Ciprofloxacino",
-        "descripcion": "Antibiótico de amplio espectro de la familia de las fluoroquinolonas.",
-        "categoria": "Antibióticos",
-        "img": "https://picsum.photos/400/225?random=8",
-        "link": "https://anmat.gov.ar/prospectos/ciprofloxacino500"
-    },
-    {
-        "id": 9,
-        "nombre": "Losartán 50mg",
-        "principio_activo": "Losartán",
-        "descripcion": "Antihipertensivo antagonista de los receptores de angiotensina II (ARA-II).",
-        "categoria": "Antihipertensivos",
-        "img": "https://picsum.photos/400/225?random=9",
-        "link": "https://anmat.gov.ar/prospectos/losartan50"
-    },
-    {
-        "id": 10,
-        "nombre": "Etinilestradiol + Drospirenona",
-        "principio_activo": "Etinilestradiol, Drospirenona",
-        "descripcion": "Anticonceptivo oral combinado de uso regular.",
-        "categoria": "Anticonceptivos",
-        "img": "https://picsum.photos/400/225?random=10",
-        "link": "https://anmat.gov.ar/prospectos/etinilestradiol_drospirenona"
-    }
+  {
+    "id": "1",
+    "nombre": "Ibuprofeno 600mg",
+    "categoria": "antiinflamatorio",
+    "dosis": "1 comprimido",
+    "frecuencia": "cada 8 horas",
+    "nota": "Solo después de las comidas",
+    "imagen": "/imagenes/medicamentos/ibuprofeno.jpg",
+    "link": "https://es.wikipedia.org/wiki/Ibuprofeno"
+  },
+  {
+    "id": "2",
+    "nombre": "Amoxicilina 500mg",
+    "categoria": "antibiotico",
+    "dosis": "1 cápsula",
+    "frecuencia": "cada 12 horas",
+    "nota": "Completar el tratamiento de 7 días",
+    "imagen": "/imagenes/medicamentos/amoxicilina.jpg",
+    "link": "https://es.wikipedia.org/wiki/Amoxicilina"
+  },
+  {
+    "id": "3",
+    "nombre": "Paracetamol 1g",
+    "categoria": "analgesico",
+    "dosis": "1 comprimido",
+    "frecuencia": "cada 6 horas",
+    "nota": "No superar 4 gramos al día",
+    "imagen": "/imagenes/medicamentos/paracetamol.jpg",
+    "link": "https://es.wikipedia.org/wiki/Paracetamol"
+  },
+  {
+    "id": "4",
+    "nombre": "Losartán 50mg",
+    "categoria": "antihipertensivo",
+    "dosis": "1 comprimido",
+    "frecuencia": "una vez al día",
+    "nota": "Tomar por la mañana",
+    "imagen": "/imagenes/medicamentos/losartan.png",
+    "link": "https://es.wikipedia.org/wiki/Losart%C3%A1n"
+  },
+  {
+    "id": "5",
+    "nombre": "Enalapril 10mg",
+    "categoria": "antihipertensivo",
+    "dosis": "1 comprimido",
+    "frecuencia": "dos veces al día",
+    "nota": "",
+    "imagen": "/imagenes/medicamentos/enalapril.png",
+    "link": "https://es.wikipedia.org/wiki/Enalapril"
+  },
+  {
+    "id": "6",
+    "nombre": "Diclofenac 75mg",
+    "categoria": "antiinflamatorio",
+    "dosis": "1 comprimido",
+    "frecuencia": "cada 12 horas",
+    "nota": "Tomar con un vaso de agua",
+    "imagen": "/imagenes/medicamentos/diclofenac.jpg",
+    "link": "https://es.wikipedia.org/wiki/Diclofenaco"
+  },
+  {
+    "id": "7",
+    "nombre": "Levonorgestrel y etinilestradiol",
+    "categoria": "anticonceptivo",
+    "dosis": "1 comprimido",
+    "frecuencia": "todos los días",
+    "nota": "tomar a las 23hs",
+    "imagen": "/imagenes/medicamentos/anticonceptiva.jpg",
+    "link": "https://es.wikipedia.org/wiki/Etinilestradiol/levonorgestrel"
+  }
+  
+  
 ]
