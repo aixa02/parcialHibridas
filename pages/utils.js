@@ -10,7 +10,7 @@ export function createPage(titulo, contenido) {
     html += '</head><body>'
 
 
-    html += '<nav class="navbar navbar-expand-lg fixed-top bg-light">'
+    html += '<nav class="navbar navbar-expand-lg fixed-top bg-light mb-5">'
     html += '   <div class="container-fluid">'
     html += '<a class="navbar-brand d-flex align-items-center" href="#">MistoMed</a>'
     html += '   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">'
@@ -21,40 +21,25 @@ export function createPage(titulo, contenido) {
     html += '<ul class="navbar-nav mx-auto">'
 
     html += '<li class="nav-item">'
-    html += '   <a class="nav-link active" aria-current="page" href="/medicamentos">Medicamentos</a>'
+    html += '   <a class="nav-link active" aria-current="page" href="/">Medicamentos</a>'
     html += '  </li>'
     html += '   <li class="nav-item">'
-    html += '  <a class="nav-link" href="/analgesicos">Analgésicos</a>'
+    html += '  <a class="nav-link" href="/categoria/analgesico">Analgésicos</a>'
     html += '   </li>'
     html += '   <li class="nav-item">'
-    html += '  <a class="nav-link" href="/antiinflamatorios">Antiinflamatorios</a>'
+    html += '  <a class="nav-link" href="/categoria/antiinflamatorio">Antiinflamatorios</a>'
     html += '   </li>'
     html += '   </li>'
     html += '   <li class="nav-item">'
-    html += '  <a class="nav-link" href="/antihipertensivos">Antihipertensivos</a>'
+    html += '  <a class="nav-link" href="/categoria/antihipertensivo">Antihipertensivos</a>'
     html += '   </li>'
     html += '   <li class="nav-item">'
-    html += '  <a class="nav-link" href="/anticonceptivos">Anticonceptivos</a>'
-    html += '   </li>'
-    html += '<li class="nav-item">'
-    html += '  <a class="nav-link " href="/anticonceptivos">Antibióticos</a>'
-    html += ' </li> </ul>'
-
+    html += '  <a class="nav-link" href="/categoria/anticonceptivo">Anticonceptivos</a>'
+    html += '   </li></ul>'
+    
     html += '  </div> </div></nav>'
 
-
-
-
-
-
-
-    html +=
-
-
-
-
-
-        html += '<main>'
+    html += '<main class="mt-4 pt-4">'
     html += contenido
     html += '</main><footer>'
     //info de footer

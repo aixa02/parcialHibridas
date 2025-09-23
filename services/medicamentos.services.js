@@ -8,15 +8,16 @@ const db = client.db("AH20232CP1")
 export async function getMedicamentos() {
     await client.connect()
     return db.collection("medicamentos").find().toArray()
-   // console.log(medicamentos)
+    // console.log(medicamentos)
 }
 
 export async function getMedicamentoById(id) {
     await client.connect()
-    return db.collection("medicamentos").findOne( { _id: new ObjectId(id) } )
+    return db.collection("medicamentos").findOne({ _id: new ObjectId(id) })
 }
 
-export async function getCategoria(categoria) {
+export async function getMedicamentosByCategoria(categoria) {
     await client.connect()
-    return db.collection("medicamentos").findOne( { categoria: categoria } )
+    return db.collection("medicamentos").find({ categoria }).toArray();
+    
 }

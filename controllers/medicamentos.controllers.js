@@ -12,3 +12,10 @@ export function getMedicamentoById(req, res) {
     service.getMedicamentoById(id)
         .then(medicamento => res.send(view.createMedicamentoDetail(medicamento)))
 }
+
+export function  getMedicamentosByCategoria(req,res){
+    const categoria=req.params.categoria
+   
+    service.getMedicamentosByCategoria(categoria)
+    .then(medicamentos =>res.send(view.createMedicamentosPage(medicamentos)))
+}

@@ -5,7 +5,7 @@ const route = express.Router()
 route.get("/", controller.getMedicamentos)
 route.get("/medicamentos/:id", controller.getMedicamentoById)
 
-//route.get("/analgesicos", controller.getCategoria)
+route.get("/categoria/:categoria", controller.getMedicamentosByCategoria)
 
 
 
