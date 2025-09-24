@@ -1,11 +1,13 @@
 import express from "express"
 import MedicamentosRoute from "./routes/medicamentos.route.js"
-//import ProductosApiRoute from "./api/routes/productos.api.routes.js"
+import MedicamentosApiRoute from "./api/routes/medicamentos.api.routes.js"
 const app = express();
 app.use(express.urlencoded({extended:true}));
+app.use( express.json() )
 
 app.use("/", MedicamentosRoute);
-//app.use("/api/productos", ProductosApiRoute)
+
+app.use("/api/medicamentos", MedicamentosApiRoute);
 app.use(express.static('public'));
 
 

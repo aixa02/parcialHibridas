@@ -18,4 +18,5 @@ export function  getMedicamentosByCategoria(req,res){
    
     service.getMedicamentosByCategoria(categoria)
     .then(medicamentos =>res.send(view.createMedicamentosPage(medicamentos)))
+    
 }

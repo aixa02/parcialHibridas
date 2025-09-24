@@ -5,11 +5,12 @@ const client = new MongoClient("mongodb+srv://admin:admin@hibridas.r8a3y5f.mongo
 // base de datos que nos conectamos
 const db = client.db("AH20232CP1")
 
-export async function getMedicamentos() {
-    await client.connect()
-    return db.collection("medicamentos").find().toArray()
-    // console.log(medicamentos)
+export async function getMedicamentos(filtros = {}) {
+    await client.connect();
+    filtros.eliminado = { $ne: true };
+    return db.collection("medicamentos").find(filtros).toArray();
 }
+
 
 export async function getMedicamentoById(id) {
     await client.connect()
@@ -18,6 +19,21 @@ export async function getMedicamentoById(id) {
 
 export async function getMedicamentosByCategoria(categoria) {
     await client.connect()
-    return db.collection("medicamentos").find({ categoria }).toArray();
-    
+    return db.collection("medicamentos").find({ categoria: categoria, eliminado: { $ne: true } }).toArray();
+
+}
+
+export async function guardarMedicamento(medicamento) {
+    await client.connect()
+    return db.collection("medicamentos").insertOne(medicamento)
+}
+
+export function editarMedicamento(medicamento, id) {
+    return db.collection("medicamentos").replaceOne({ _id: new ObjectId(id) }, medicamento)
+}
+
+export function eliminarMedicamento(id) {
+    return db.collection("medicamentos").updateOne({ _id: new ObjectId(id) }, {
+        $set: { eliminado: true }
+    })
 }
