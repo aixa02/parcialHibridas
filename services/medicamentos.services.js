@@ -23,6 +23,16 @@ export async function getMedicamentosByCategoria(categoria) {
 
 }
 
+export async function getMedicamentosPorCliente(clienteId) {
+    // Conectar si tu cliente necesita connect (ajustá según tu implementación)
+    await client.connect()
+        .then(() => {
+            return db.collection("medicamentos")
+                .find({ clientes: new ObjectId(clienteId) }).toArray();
+        });
+}
+
+
 export async function guardarMedicamento(medicamento) {
     await client.connect()
     return db.collection("medicamentos").insertOne(medicamento)
@@ -36,4 +46,12 @@ export function eliminarMedicamento(id) {
     return db.collection("medicamentos").updateOne({ _id: new ObjectId(id) }, {
         $set: { eliminado: true }
     })
+}
+
+export async function agregarClienteAMedicamento(medicamentoId, clienteId) {
+    await client.connect();
+    return db.collection("medicamentos").updateOne(
+        { _id: new ObjectId(medicamentoId) },
+        { $addToSet: { clientes: clienteId } } //agrega el clienteId al array y tambien evita duplicados
+    );
 }

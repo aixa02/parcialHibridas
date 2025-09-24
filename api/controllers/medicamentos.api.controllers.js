@@ -31,7 +31,7 @@ export function createMedicamento(req, res) {
 export function updateMedicamento(req, res) {
 
     const id = req.params.id;
-    
+
     const medicamento = {
         nombre: req.body.nombre,
         categoria: req.body.categoria,
@@ -53,4 +53,13 @@ export function deleteMedicamento(req, res) {
     services.eliminarMedicamento(id)
         .then((id) => res.status(202).json({ message: `El medicamento con id: ${id} se eliminó correctamente` }))
         .catch(err => res.status(500).json({ message: "Error al eliminar el medicamento" }));
+}
+
+export function addClienteAMedicamento(req, res) {
+    const medicamentoId = req.params;
+    const clienteId = req.body;
+    sevices.agregarClienteAMedicamento(medicamentoId, clienteId)
+        .then(() => res.status(200).json({ message: "Cliente agregado al medicamento" }))
+        .catch(() => res.status(500).json({ message: "Error al agregar cliente" }));
+
 }

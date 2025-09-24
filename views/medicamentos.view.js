@@ -6,7 +6,7 @@ export function createMedicamentosPage(medicamentos) {
         <div class="container mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="h3">Mis Medicamentos</h1>
-                <a href="/medicamento/nuevo" class="btn btn-success">➕ Nuevo medicamento</a>
+               
             </div>
 
             <div class="row g-4">

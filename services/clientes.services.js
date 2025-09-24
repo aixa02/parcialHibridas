@@ -9,8 +9,13 @@ export async function getClientes(filtros = {}) {
     filtros.eliminado = { $ne: true };
     return db.collection("clientes").find(filtros).toArray();
 }
+export async function getClienteById(id) {
+    await client.connect();
+    return db.collection("clientes").findOne({ _id: new ObjectId(id) });
+}
 
 export async function guardarCliente(cliente) {
-    
-    
+    await client.connect();
+    const result = await db.collection("clientes").insertOne(cliente);
+    return { ...cliente, _id: result.insertedId };//devuelve el cliente guardado con su id
 }

@@ -4,8 +4,8 @@ import * as controllers from "../controllers/clientes.api.controllers.js"
 const route = express.Router()
 //compass: https://www.mongodb.com/try/download/compass
 route.get( "/", controllers.getClientes )
-
-//route.get( "/:id", controllers.getMedicamentosById )
+route.get( "/:id", controllers.getClienteById )
+route.get( "/:id/medicamentos", controllers.getMedicamentosdeCliente )
 route.post( "/", controllers.createCliente )
 //route.delete("/:id", controllers.deleteCliente)
 //route.put( "/:id", controllers.updateCliente)
