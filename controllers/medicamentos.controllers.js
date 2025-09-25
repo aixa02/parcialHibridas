@@ -15,7 +15,7 @@ export function getMedicamentoById(req, res) {
 
 export function  getMedicamentosByCategoria(req,res){
     const categoria=req.params.categoria
-   
+
     service.getMedicamentosByCategoria(categoria)
     .then(medicamentos =>res.send(view.createMedicamentosPage(medicamentos)))
     

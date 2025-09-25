@@ -30,15 +30,21 @@ export function getMedicamentosdeCliente(req, res) {
             if (!cliente) {
                 return res.status(404).json({ message: "Cliente no encontrado" });
             }
+            // si el cliente no tiene medicamentos
+            if (!cliente.medicamentos || cliente.medicamentos.length === 0) {
+                return res.status(200).json({ message: "No existen medicamentos guardados"});
+            }
+            // buscamos los medicamentos por los ids guardados en el cliente
             return servicesMedicamento.getMedicamentos({
-                clientes: new ObjectId(clienteId) //new ObjectId(clienteId) convierte el clienteId en un ObjectId válido
+                _id: { $in: cliente.medicamentos } 
             })
                 .then(medicamentos => {
                     res.status(200).json({ cliente, medicamentos });
                 });
         })
         .catch(err => {
-            res.status(500).json({ message: "Error interno", error: err.message })});
+            res.status(500).json({ message: "Error interno", error: err.message });
+        });
 
 }
 
@@ -51,12 +57,28 @@ export function createCliente(req, res) {
     servicesCliente.guardarCliente(cliente)
         .then(clienteGuardado => {
             if (medicamentoId) {
-                return servicesMedicamento.agregarClienteAMedicamento(medicamentoId, clienteGuardado._id)
-                    .then(() => clienteGuardado); 
+                return servicesMedicamento.agregarMedicamentoACliente( clienteGuardado._id, medicamentoId)
+                    .then(() => clienteGuardado);
             }
             return clienteGuardado;
         })
 
         .then(clienteGuardado => res.status(201).json(clienteGuardado))
         .catch(err => res.status(500).json({ message: "No se guardó el cliente", error: err.message }));
+}
+
+export function addMedicamentoCliente(req, res) {
+    const clienteId = req.params.id;
+    const medicamentoId = req.body.medicamentoId;
+    servicesCliente.agregarMedicamentoACliente(clienteId, medicamentoId)
+        .then(() => res.status(200).json({
+            message: `Medicamento ${medicamentoId} agregado al cliente ${clienteId}`
+        })
+        )
+        .catch(err =>
+            res.status(500).json({
+                message: "No se pudo agregar el medicamento al cliente", error: err.message
+            })
+        );
+
 }

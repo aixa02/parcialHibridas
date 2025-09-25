@@ -48,10 +48,10 @@ export function eliminarMedicamento(id) {
     })
 }
 
-export async function agregarClienteAMedicamento(medicamentoId, clienteId) {
+/*export async function agregarClienteAMedicamento(medicamentoId, clienteId) {
     await client.connect();
     return db.collection("medicamentos").updateOne(
         { _id: new ObjectId(medicamentoId) },
         { $addToSet: { clientes: clienteId } } //agrega el clienteId al array y tambien evita duplicados
     );
-}
+}*/

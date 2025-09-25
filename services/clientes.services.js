@@ -19,3 +19,11 @@ export async function guardarCliente(cliente) {
     const result = await db.collection("clientes").insertOne(cliente);
     return { ...cliente, _id: result.insertedId };//devuelve el cliente guardado con su id
 }
+
+export async function agregarMedicamentoACliente(clienteId, medicamentoId) {
+    await client.connect();
+    return db.collection("clientes").updateOne(
+        { _id: new ObjectId(clienteId) },
+        { $addToSet: { medicamentos: new ObjectId(medicamentoId) } }
+    );
+}
