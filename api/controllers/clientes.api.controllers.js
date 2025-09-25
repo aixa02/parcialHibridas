@@ -21,6 +21,24 @@ export function getClienteById(req, res) {
         .catch(err => res.status(500).json({ message: "error interno del servidor" }))
 }
 
+
+export function createCliente(req, res) {
+    const { nombre, imagen, descripcion, medicamentoId } = req.body;
+    const cliente = { nombre, imagen, descripcion };
+
+    servicesCliente.guardarCliente(cliente)
+        .then(clienteGuardado => {
+            if (medicamentoId) {
+                return servicesMedicamento.agregarMedicamentoACliente( clienteGuardado._id, medicamentoId)
+                    .then(() => clienteGuardado);
+            }
+            return clienteGuardado;
+        })
+
+        .then(clienteGuardado => res.status(201).json(clienteGuardado))
+        .catch(err => res.status(500).json({ message: "No se guardó el cliente", error: err.message }));
+}
+
 export function getMedicamentosdeCliente(req, res) {
 
     const clienteId = req.params.id;
@@ -46,25 +64,6 @@ export function getMedicamentosdeCliente(req, res) {
             res.status(500).json({ message: "Error interno", error: err.message });
         });
 
-}
-
-
-
-export function createCliente(req, res) {
-    const { nombre, imagen, descripcion, medicamentoId } = req.body;
-    const cliente = { nombre, imagen, descripcion };
-
-    servicesCliente.guardarCliente(cliente)
-        .then(clienteGuardado => {
-            if (medicamentoId) {
-                return servicesMedicamento.agregarMedicamentoACliente( clienteGuardado._id, medicamentoId)
-                    .then(() => clienteGuardado);
-            }
-            return clienteGuardado;
-        })
-
-        .then(clienteGuardado => res.status(201).json(clienteGuardado))
-        .catch(err => res.status(500).json({ message: "No se guardó el cliente", error: err.message }));
 }
 
 export function addMedicamentoCliente(req, res) {
