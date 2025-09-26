@@ -29,7 +29,7 @@ export function createCliente(req, res) {
     servicesCliente.guardarCliente(cliente)
         .then(clienteGuardado => {
             if (medicamentoId) {
-                return servicesMedicamento.agregarMedicamentoACliente( clienteGuardado._id, medicamentoId)
+                return servicesMedicamento.agregarMedicamentoACliente(clienteGuardado._id, medicamentoId)
                     .then(() => clienteGuardado);
             }
             return clienteGuardado;
@@ -50,11 +50,11 @@ export function getMedicamentosdeCliente(req, res) {
             }
             // si el cliente no tiene medicamentos
             if (!cliente.medicamentos || cliente.medicamentos.length === 0) {
-                return res.status(200).json({ message: "No existen medicamentos guardados"});
+                return res.status(200).json({ message: "No existen medicamentos guardados" });
             }
             // buscamos los medicamentos por los ids guardados en el cliente
             return servicesMedicamento.getMedicamentos({
-                _id: { $in: cliente.medicamentos } 
+                _id: { $in: cliente.medicamentos }
             })
                 .then(medicamentos => {
                     res.status(200).json({ cliente, medicamentos });
@@ -80,4 +80,11 @@ export function addMedicamentoCliente(req, res) {
             })
         );
 
+}
+
+export function deleteCliente(req, res) {
+    const id = req.params.id;
+    servicesCliente.eliminarClienteLogico(id)
+        .then((id) => res.status(202).json({ message: `El cliente id: ${id} se elimino correctamente` })) 
+        .catch (err => res.status(500).json({ message: err }) )
 }

@@ -14,6 +14,7 @@ export async function getClienteById(id) {
     return db.collection("clientes").findOne({ _id: new ObjectId(id) });
 }
 
+
 export async function guardarCliente(cliente) {
     await client.connect();
     const result = await db.collection("clientes").insertOne(cliente);
@@ -21,9 +22,16 @@ export async function guardarCliente(cliente) {
 }
 
 export async function agregarMedicamentoACliente(clienteId, medicamentoId) {
-    await client.connect();
+
     return db.collection("clientes").updateOne(
         { _id: new ObjectId(clienteId) },
         { $addToSet: { medicamentos: new ObjectId(medicamentoId) } }
     );
+}
+
+export async function eliminarClienteLogico(id) {
+    return db.collection("clientes").updateOne(
+        { _id: new ObjectId(id) }, {
+        $set: { eliminado: true }
+    })
 }

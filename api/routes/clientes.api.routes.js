@@ -8,7 +8,7 @@ route.get( "/:id", controllers.getClienteById )
 route.get( "/:id/medicamentos", controllers.getMedicamentosdeCliente )
 route.post( "/", controllers.createCliente )
 route.post( "/:id/medicamentos", controllers.addMedicamentoCliente )
-//route.delete("/:id", controllers.deleteCliente)
+route.delete("/:id", controllers.deleteCliente)
 //route.put( "/:id", controllers.updateCliente)
 //route.patch( "/:id", controllers.editarMedicamento )
 

@@ -30,7 +30,7 @@ export function createMedicamento(req, res) {
         imagen: req.body.imagen,
         link: req.body.link
     };
-    const clienteId = req.params.clienteId;
+    const clienteId = req.params.id;
 
     servicesMedicamento.guardarMedicamento(medicamento)
         .then(medicamentoGuardado => {
