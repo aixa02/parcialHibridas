@@ -9,7 +9,7 @@ app.use(express.urlencoded({extended:true}));
 app.use( express.json() )
 app.use(cors());
 app.use("/", MedicamentosRoute);
-
+app.use('/imagenes', express.static('imagenes'));
 app.use("/api/medicamentos", MedicamentosApiRoute);
 app.use("/api/clientes", ClientesApiRoute);
 app.use(express.static('public'));
