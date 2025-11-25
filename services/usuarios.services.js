@@ -1,6 +1,7 @@
 import { MongoClient, ObjectId } from "mongodb";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { crearToken } from "./tokens.services.js";
 
 //instancia de Mongo
 const client = new MongoClient("mongodb+srv://admin:admin@hibridas.r8a3y5f.mongodb.net/")
@@ -30,7 +31,7 @@ export async function login(usuario) {
 
     const existe = await db.collection("usuarios").findOne({ email: usuario.email })
     if (!existe) throw new Error("Credenciales invalidas")
-    const token = jwt.sign({ ...existe, password: undefined, confirmPassword: undefined }, SECRET_KEY, { expiresIn: "2h" })
+    const token = await crearToken(existe)
 
     const esValido = await bcrypt.compare(usuario.password, existe.password)
     if (!esValido) throw new Error("Credenciales invalidas")
