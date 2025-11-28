@@ -1,16 +1,21 @@
 import express from "express"
 import * as controllers from "../controllers/medicamentos.api.controllers.js"
 import { validateMedicamento } from "../../middleware/medicamento.validate.js"
-import { validateToken } from "../../services/tokens.services.js"
+import { verificarPropietarioMedicamento } from "../../middleware/verificarPropietarioMedicamento.js"
+import { validateToken } from "../../middleware/token.validate.js"
 
 const route = express.Router()
 //compass: https://www.mongodb.com/try/download/compass
-route.get("/", controllers.getMedicamentos)
+route.get("/", [validateToken], controllers.getMedicamentos)
 
-route.get("/:id",[validateToken], controllers.getMedicamentoById)
-route.post("/", [validateMedicamento], controllers.createMedicamento)
-route.delete("/:id", controllers.deleteMedicamento)
-route.put("/:id", [validateMedicamento], controllers.updateMedicamento)
+route.get("/:id", controllers.getMedicamentoById)
+route.post("/", [validateToken, validateMedicamento], controllers.createMedicamento);
+
+// Actualizar medicamento (puede usar verificarPropietario si quieres)
+route.put("/:id", [validateToken, verificarPropietarioMedicamento, validateMedicamento], controllers.updateMedicamento);
+
+// Eliminar medicamento
+route.delete("/:id", [validateToken, verificarPropietarioMedicamento], controllers.deleteMedicamento);
 
 
 export default route

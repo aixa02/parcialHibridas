@@ -24,7 +24,6 @@ export async function getMedicamentosByCategoria(categoria) {
 }
 
 export async function getMedicamentosPorCliente(clienteId) {
-    // Conectar si tu cliente necesita connect (ajustá según tu implementación)
     await client.connect()
         .then(() => {
             return db.collection("medicamentos")
@@ -34,9 +33,16 @@ export async function getMedicamentosPorCliente(clienteId) {
 
 
 export async function guardarMedicamento(medicamento) {
-    await client.connect()
-    return db.collection("medicamentos").insertOne(medicamento)
+    await client.connect();
+
+    const resultado = await db.collection("medicamentos").insertOne(medicamento);
+
+    return {
+        ...medicamento,
+        _id: resultado.insertedId
+    };
 }
+
 
 export function editarMedicamento(medicamento, id) {
     return db.collection("medicamentos").replaceOne({ _id: new ObjectId(id) }, medicamento)

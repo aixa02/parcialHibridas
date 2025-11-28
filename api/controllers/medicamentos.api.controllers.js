@@ -12,36 +12,37 @@ export function getMedicamentos(req, res) {
         .catch(err => res.status(500).json({ message: "error interno del servidor" }));
 }
 
-export function getMedicamentoById(req,res){
-    const id= req.params.id
+export function getMedicamentoById(req, res) {
+    const id = req.params.id
     servicesMedicamento.getMedicamentoById(id)
-    .then(medicamento => res.status(200).json(medicamento))
+        .then(medicamento => res.status(200).json(medicamento))
         .catch(err => res.status(500).json({ message: "error interno del servidor" }));
 }
 
 export function createMedicamento(req, res) {
     //recibimos los datos del body de la request y armamos un objeto
+    const imagenFinal = req.body.imagen && req.body.imagen.trim() !== ""
+        ? req.body.imagen
+        : "/imagenes/medicamentos/placeholder.jpg";
     const medicamento = {
         nombre: req.body.nombre,
         categoria: req.body.categoria,
         dosis: req.body.dosis,
         frecuencia: req.body.frecuencia,
-        nota: req.body.nota,
-        imagen: req.body.imagen,
-        link: req.body.link
+        nota: req.body.nota || "",
+        imagen: imagenFinal,
+        link: req.body.link,
+        usuarioId: req.usuario._id
     };
-    const clienteId = req.params.id;
+    // const clienteId = req.params.id;
+    console.log("Usuario en createMedicamento:", req.usuario);
 
     servicesMedicamento.guardarMedicamento(medicamento)
-        .then(medicamentoGuardado => {
-            if (clienteId) {
-                return servicesCliente.agregarMedicamentoACliente(clienteId, medicamentoGuardado._id)
-                    .then(() => medicamentoGuardado);
-            }
-            return medicamentoGuardado;
-        })
-        .then(medicamentoFinal => res.status(201).json(medicamentoFinal))
-        .catch(err => res.status(500).json({ message: "No se guardó el medicamento", error: err.message }));
+        .then(medicamentoGuardado => res.status(201).json(medicamentoGuardado))
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ message: "No se guardó el medicamento", error: err.message });
+        });
 }
 
 export function updateMedicamento(req, res) {
@@ -64,11 +65,22 @@ export function updateMedicamento(req, res) {
         .catch(err => res.status(500).json({ message: "No se pudo editar." }));
 }
 
-export function deleteMedicamento(req, res) {
+export async function deleteMedicamento(req, res) {
     const id = req.params.id;
-    servicesMedicamento.eliminarMedicamento(id)
-        .then((id) => res.status(202).json({ message: `El medicamento con id: ${id} se eliminó correctamente` }))
-        .catch(err => res.status(500).json({ message: "Error al eliminar el medicamento" }));
+    try {
+        const medicamento = await servicesMedicamento.getMedicamentoById(id);
+        if (!medicamento) return res.status(404).json({ message: "Medicamento no encontrado" });
+
+        if (medicamento.usuarioId !== req.usuario._id.toString()) {
+            return res.status(403).json({ message: "No tenés permisos para eliminar este medicamento" });
+        }
+
+        await servicesMedicamento.eliminarMedicamento(id);
+        res.status(200).json({ message: `El medicamento con id: ${id} se eliminó correctamente` });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error al eliminar el medicamento" });
+    }
 }
 
 export function addClienteAMedicamento(req, res) {

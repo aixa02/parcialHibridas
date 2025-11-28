@@ -4,7 +4,7 @@ import * as tokenService from "../services/tokens.services.js"
 
 export async function validateToken(req, res, next) {
     try {
-        
+
         const auth = req.headers.authorization
 
         if (!auth) return res.status(401).json({ message: "Token no encontrado" })
@@ -17,7 +17,7 @@ export async function validateToken(req, res, next) {
 
         if (!usuario) return res.status(401).json({ message: "Token invalido" })
         req.usuario = usuario
-
+        console.log(token)
         next()
     } catch (error) {
         res.status(401).json({ message: "Token Error" })

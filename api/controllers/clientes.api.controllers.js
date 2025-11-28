@@ -66,25 +66,44 @@ export function getMedicamentosdeCliente(req, res) {
 
 }
 
-export function addMedicamentoCliente(req, res) {
-    const clienteId = req.params.id;
-    const medicamentoId = req.body.medicamentoId;
-    servicesCliente.agregarMedicamentoACliente(clienteId, medicamentoId)
-        .then(() => res.status(200).json({
-            message: `Medicamento ${medicamentoId} agregado al cliente ${clienteId}`
-        })
-        )
-        .catch(err =>
-            res.status(500).json({
-                message: "No se pudo agregar el medicamento al cliente", error: err.message
-            })
-        );
 
+export async function addMedicamentoCliente(req, res) {
+    try {
+        const clienteId = req.params.id;
+        const { medicamentoId } = req.body;
+
+        if (!medicamentoId) {
+            return res.status(400).json({ error: "Falta el ID del medicamento" });
+        }
+
+        // Verificar que el cliente exista
+        const cliente = await servicesCliente.getClienteById(clienteId);
+
+        if (!cliente) {
+            return res.status(404).json({ error: "Cliente no encontrado" });
+        }
+
+        // Agregar medicamento
+        const result = await servicesCliente.agregarMedicamentoACliente(clienteId, medicamentoId);
+
+        if (result.modifiedCount === 0) {
+            return res.status(400).json({
+                error: "El medicamento ya estaba agregado o no se pudo agregar"
+            });
+        }
+
+        return res.status(200).json({ message: "Medicamento agregado correctamente" });
+
+    } catch (error) {
+        console.log("ERROR addMedicamentoCliente:", error);
+        return res.status(500).json({ error: "Error interno al agregar el medicamento" });
+    }
 }
+
 
 export function deleteCliente(req, res) {
     const id = req.params.id;
     servicesCliente.eliminarClienteLogico(id)
-        .then((id) => res.status(202).json({ message: `El cliente id: ${id} se elimino correctamente` })) 
-        .catch (err => res.status(500).json({ message: err }) )
+        .then((id) => res.status(202).json({ message: `El cliente id: ${id} se elimino correctamente` }))
+        .catch(err => res.status(500).json({ message: err }))
 }

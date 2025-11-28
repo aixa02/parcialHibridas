@@ -19,14 +19,9 @@ export async function createUser(usuario) {
 
     usuarioNuevo.password = await bcrypt.hash(usuario.password, 10)
 
-    // INSERTAR USUARIO Y OBTENER SU ID
-    const result = await db.collection("usuarios").insertOne(usuarioNuevo);
 
-    // DEVOLVER EL USUARIO JUNTO AL _id REAL
-    return {
-        _id: result.insertedId,
-        email: usuarioNuevo.email
-    };
+    await db.collection("usuarios").insertOne(usuarioNuevo)
+    return { ...usuario, password: undefined, confirmPassword: undefined }
 
 }
 
@@ -42,10 +37,10 @@ export async function login(usuario) {
 
     const token = await crearToken(existe)
 
-    return {
-        ...existe,
-        password: undefined,
-        confirmPassword: undefined,
-        token: token
+    return { 
+        ...existe, 
+        password: undefined, 
+        confirmPassword: undefined, 
+        token: token 
     }
 }

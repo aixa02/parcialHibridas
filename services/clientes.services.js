@@ -9,9 +9,9 @@ export async function getClientes(filtros = {}) {
     filtros.eliminado = { $ne: true };
     return db.collection("clientes").find(filtros).toArray();
 }
-export async function getClienteById(id) {
+export async function getClienteById(usuario_id) {
     await client.connect();
-    return db.collection("clientes").findOne({ _id: new ObjectId(id) });
+    return db.collection("clientes").findOne({ _id: new ObjectId(usuario_id) });
 }
 
 
@@ -22,6 +22,8 @@ export async function guardarCliente(cliente) {
 }
 
 export async function agregarMedicamentoACliente(clienteId, medicamentoId) {
+
+    await client.connect();
 
     return db.collection("clientes").updateOne(
         { _id: new ObjectId(clienteId) },
