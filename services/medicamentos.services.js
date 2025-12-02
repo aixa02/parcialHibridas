@@ -23,6 +23,7 @@ export async function getMedicamentosByCategoria(categoria) {
 
 }
 
+
 export async function getMedicamentosPorCliente(clienteId) {
     await client.connect()
         .then(() => {
@@ -45,8 +46,14 @@ export async function guardarMedicamento(medicamento) {
 
 
 export function editarMedicamento(medicamento, id) {
-    return db.collection("medicamentos").replaceOne({ _id: new ObjectId(id) }, medicamento)
+    return db
+        .collection("medicamentos")
+        .updateOne(
+            { _id: new ObjectId(id) },
+            { $set: medicamento }
+        );
 }
+
 
 export function eliminarMedicamento(id) {
     return db.collection("medicamentos").updateOne({ _id: new ObjectId(id) }, {

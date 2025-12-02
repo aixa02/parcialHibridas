@@ -2,26 +2,23 @@ import * as services from "../../services/usuarios.services.js"
 import * as clienteServices from "../../services/clientes.services.js"
 
 export function createUser(req, res) {
-    services.createUser(req.body)
-        .then(async usuarioCreado => {
 
-            const clienteData = {
-                usuario_id: usuarioCreado._id,
-                nombre: "",
-                imagen: "",
-                descripcion: "",
-                medicamentos: []
-            };
+    // Agregamos rol por defecto sin alterar otros campos
+    const datosUsuario = {
+        ...req.body,
+        rol: "user"
+    };
 
-            const clienteCreado = await clienteServices.guardarCliente(clienteData);
-
+    services.createUser(datosUsuario)
+        .then(usuarioCreado => {
+            // Ya no se crean clientes asociados
             res.status(201).json({
-                usuario: usuarioCreado,
-                cliente: clienteCreado
+                usuario: usuarioCreado
             });
         })
         .catch(err => res.status(500).json(err));
 }
+
 
 
 export async function login(req, res) {
@@ -30,14 +27,14 @@ export async function login(req, res) {
         const usuario = await services.login(req.body);
 
         // buscamos el cliente asociado al usuario
-        const cliente = await clienteServices.getClienteById(usuario._id);
+        //const cliente = await clienteServices.getClienteById(usuario._id);
 
         res.status(200).json({
             usuario: {
                 _id: usuario._id,
                 email: usuario.email
             },
-            cliente: cliente ? { _id: cliente._id, nombre: cliente.nombre } : null,
+           // cliente: cliente ? { _id: cliente._id, nombre: cliente.nombre } : null,
             token: usuario.token
         });
 

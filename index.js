@@ -4,6 +4,7 @@ import MedicamentosApiRoute from "./api/routes/medicamentos.api.routes.js"
 import ClientesApiRoute from "./api/routes/clientes.api.routes.js"
 import UsuariosApiRoute from "./api/routes/usuarios.api.routes.js"
 import cors from "cors";
+import CategoriasApiRoute from "./api/routes/categorias.api.routes.js";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -13,6 +14,9 @@ app.use("/", MedicamentosRoute);
 app.use('/imagenes', express.static('imagenes'));
 app.use("/api/medicamentos", MedicamentosApiRoute);
 app.use("/api/clientes", ClientesApiRoute);
+
+app.use("/api/categorias", CategoriasApiRoute);
+
 app.use(express.static('public'));
 
 app.use("/api/usuarios", UsuariosApiRoute);

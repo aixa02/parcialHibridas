@@ -17,6 +17,8 @@ const categoriasPorDefecto = [
     { nombre: "Antidepresivos" },
     { nombre: "Laxantes" },
     { nombre: "Ansiolíticos" },
+    {nombnre: "Antihipertensivo"},
+    
   
 
 ];

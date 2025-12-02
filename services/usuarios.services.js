@@ -15,7 +15,7 @@ export async function createUser(usuario) {
     const existe = await db.collection("usuarios").findOne({ email: usuario.email })
     if (existe) throw new Error("No se pudo crear el usuario")
 
-    const usuarioNuevo = { email: usuario.email, password: usuario.password }
+    const usuarioNuevo = { email: usuario.email, password: usuario.password, rol: "user"}
 
     usuarioNuevo.password = await bcrypt.hash(usuario.password, 10)
 

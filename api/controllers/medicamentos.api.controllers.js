@@ -19,6 +19,17 @@ export function getMedicamentoById(req, res) {
         .catch(err => res.status(500).json({ message: "error interno del servidor" }));
 }
 
+export async function getMedicamentosByCategoria(req, res) {
+    const categoria = req.params.categoria;
+    try {
+        const medicamentos = await services.getMedicamentosByCategoria(categoria);
+        res.status(200).json(medicamentos);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error al obtener medicamentos por categoría" });
+    }
+}
+
 export function createMedicamento(req, res) {
     //recibimos los datos del body de la request y armamos un objeto
     const imagenFinal = req.body.imagen && req.body.imagen.trim() !== ""
@@ -46,24 +57,29 @@ export function createMedicamento(req, res) {
 }
 
 export function updateMedicamento(req, res) {
-
     const id = req.params.id;
 
-    const medicamento = {
-        nombre: req.body.nombre,
-        categoria: req.body.categoria,
-        dosis: req.body.dosis,
-        frecuencia: req.body.frecuencia,
-        nota: req.body.nota,
-        imagen: req.body.imagen,
-        link: req.body.link
+    // Objeto dinámico: solo los campos que vienen definidos
+    const medicamento = {};
 
-    };
+    const campos = ["nombre", "categoria", "dosis", "frecuencia", "nota", "imagen", "link"];
+    campos.forEach(campo => {
+        if (req.body[campo] !== undefined && req.body[campo] !== "") {
+            medicamento[campo] = req.body[campo];
+        }
+    });
+
+    // Importante: si tu modelo usa usuarioId, hay que conservarlo
+    medicamento.usuarioId = req.usuario._id;
 
     servicesMedicamento.editarMedicamento(medicamento, id)
-        .then(() => res.status(202).json({ _id: id }))
-        .catch(err => res.status(500).json({ message: "No se pudo editar." }));
+        .then(() => res.status(200).json({ _id: id }))
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ message: "No se pudo editar." });
+        });
 }
+
 
 export async function deleteMedicamento(req, res) {
     const id = req.params.id;
