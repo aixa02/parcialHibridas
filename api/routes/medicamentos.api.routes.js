@@ -7,6 +7,7 @@ import { validateToken } from "../../middleware/token.validate.js"
 const route = express.Router()
 //compass: https://www.mongodb.com/try/download/compass
 route.get("/", [validateToken], controllers.getMedicamentos)
+
 route.get("/categoria/:categoria", [validateToken], controllers.getMedicamentosByCategoria);
 route.get("/:id", controllers.getMedicamentoById)
 route.post("/", [validateToken, validateMedicamento], controllers.createMedicamento);

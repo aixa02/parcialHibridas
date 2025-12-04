@@ -2,14 +2,33 @@ import * as servicesCliente from "../../services/clientes.services.js"
 import * as servicesMedicamento from "../../services/medicamentos.services.js"
 
 export function getMedicamentos(req, res) {
-    const filtros = {};//si no se aplica ningun filtro, devuelve todos los medicamentos
+    const filtros = {}; // si no hay filtros, devuelve todo
 
-    if (req.query.categoria) filtros.categoria = req.query.categoria;
-    if (req.query.nombre) filtros.nombre = req.query.nombre;
+    if (req.query.categoria) {
+        filtros.categoria = req.query.categoria;
+    }
+
+    if (req.query.nombre) {
+        filtros.nombre = {
+            $regex: req.query.nombre,
+            $options: "i" // insensible a mayúsculas
+        };
+    }
 
     servicesMedicamento.getMedicamentos(filtros)
-        .then(medicamentos => res.status(200).json(medicamentos))
-        .catch(err => res.status(500).json({ message: "error interno del servidor" }));
+        .then(medicamentos => {
+            if (medicamentos.length === 0) {
+                return res.status(200).json({
+                    message: "No se encontraron medicamentos con los filtros aplicados",
+                    data: []
+                });
+            }
+            res.status(200).json(medicamentos);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ message: "error interno del servidor" });
+        });
 }
 
 export function getMedicamentoById(req, res) {
