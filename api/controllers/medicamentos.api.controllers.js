@@ -126,3 +126,63 @@ export function addClienteAMedicamento(req, res) {
         .catch(() => res.status(500).json({ message: "Error al agregar cliente" }));
 
 }
+export async function compartirMedicamento(req, res) {
+    const medicamentoId = req.params.id;
+    const usuarioACompartir = req.body.usuarioId;
+
+    try {
+        const medicamento = await servicesMedicamento.getMedicamentoById(medicamentoId);
+
+        if (!medicamento) {
+            return res.status(404).json({ message: "Medicamento no encontrado" });
+        }
+
+        // Solo el propietario puede compartir
+        if (medicamento.usuarioId !== req.usuario._id.toString()) {
+            return res.status(403).json({ message: "Solo el creador puede compartir el medicamento" });
+        }
+
+        // Inicializa compartidoCon si no existe
+        if (!medicamento.compartidoCon) {
+            medicamento.compartidoCon = [];
+        }
+
+        // Evitar duplicados
+        if (!medicamento.compartidoCon.includes(usuarioACompartir)) {
+            medicamento.compartidoCon.push(usuarioACompartir);
+        }
+
+        await servicesMedicamento.editarMedicamento(medicamento, medicamentoId);
+
+        res.status(200).json({ message: "Medicamento compartido correctamente" });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error al compartir medicamento" });
+    }
+}
+export async function dejarDeCompartir(req, res) {
+    const medicamentoId = req.params.id;
+    const usuarioId = req.params.usuarioId;
+
+    try {
+        const medicamento = await servicesMedicamento.getMedicamentoById(medicamentoId);
+
+        if (!medicamento) return res.status(404).json({ message: "Medicamento no encontrado" });
+
+        if (medicamento.usuarioId !== req.usuario._id.toString()) {
+            return res.status(403).json({ message: "Solo el creador puede modificar los permisos" });
+        }
+
+        medicamento.compartidoCon = medicamento.compartidoCon.filter(u => u !== usuarioId);
+
+        await servicesMedicamento.editarMedicamento(medicamento, medicamentoId);
+
+        res.status(200).json({ message: "Usuario eliminado del acceso" });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error al actualizar permisos" });
+    }
+}
+

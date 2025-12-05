@@ -9,34 +9,40 @@ const SECRET_KEY = "dwm4av"
 const tokens = db.collection("tokens")
 
 export async function crearToken(usuario) {
-    const token = jwt.sign({ ...usuario, password: undefined, confirmPassword: undefined }, SECRET_KEY, { expiresIn: "2h" })
-    await client.connect()
+    await client.connect();
+
+    const token = jwt.sign(
+        { _id: usuario._id.toString(), email: usuario.email, rol: usuario.rol },
+        SECRET_KEY,
+        { expiresIn: "2h" }
+    );
 
     await tokens.updateOne(
         { usuario_id: usuario._id },
         { $set: { token: token, usuario_id: usuario._id } },
-        { upsert: true })
+        { upsert: true }
+    );
 
-
-    return token
+    return token;
 }
+
 
 export async function validateToken(token) {
     try {
-        const payload = jwt.verify(token, SECRET_KEY)
-        console.log("payload", payload)
-        const sessionActiva = await tokens.findOne({ token: token, usuario_id: new ObjectId(payload._id) })
+        // Normalizamos token por si viene con "Bearer ..." o comillas
+        const cleanToken = token.replace(/"/g, "").replace("Bearer ", "").trim();
 
-        if (!sessionActiva) throw new Error("Token invalido")
-        //console.log("sessionActiva", sessionActiva)
+        const payload = jwt.verify(cleanToken, SECRET_KEY);
 
-        //iat: Fecha de creacion del token
-        //exp: Fecha de expiracion del token
-        if (payload.exp < (new Date().getTime() / 1000)) throw new Error("token expirado")
+        const usuarioDb = await db.collection("usuarios")
+            .findOne({ _id: new ObjectId(payload._id) });
 
-        return payload
+        if (!usuarioDb) throw new Error("Usuario no encontrado");
+
+        return usuarioDb;
 
     } catch (error) {
+        console.error("Error validando token:", error);
         throw new Error("Token invalido");
     }
 }

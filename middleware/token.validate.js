@@ -11,7 +11,7 @@ export async function validateToken(req, res, next) {
 
         const [bearer, token] = auth.split(" ")
 
-        if (bearer != "Bearer" && !token) return res.status(401).json({ message: "Formato de token invalido" })
+        if (bearer != "Bearer" || !token) return res.status(401).json({ message: "Formato de token invalido" })
 
         const usuario = await tokenService.validateToken(token)
 

@@ -49,3 +49,13 @@ export async function login(usuario) {
         token: token
     }
 }
+export async function buscarUsuariosPorEmail(email) {
+    await client.connect();
+
+    return db.collection("usuarios")
+        .find({
+            email: { $regex: email, $options: "i" }
+        })
+        .project({ _id: 1, email: 1 })
+        .toArray();
+}

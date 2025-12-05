@@ -34,12 +34,25 @@ export async function login(req, res) {
                 _id: usuario._id,
                 email: usuario.email
             },
-           // cliente: cliente ? { _id: cliente._id, nombre: cliente.nombre } : null,
+            // cliente: cliente ? { _id: cliente._id, nombre: cliente.nombre } : null,
             token: usuario.token
         });
 
     } catch (err) {
         console.error("Error login:", err);
         res.status(400).json({ error: err.message });
+    }
+}
+export async function buscarUsuarios(req, res) {
+    const { email } = req.query;
+
+    if (!email) return res.json([]);
+
+    try {
+        const usuarios = await services.buscarUsuariosPorEmail(email);
+        res.json(usuarios);
+    } catch (err) {
+        console.error("Error al buscar usuarios:", err);
+        res.status(500).json({ error: "Error al buscar usuarios" });
     }
 }
