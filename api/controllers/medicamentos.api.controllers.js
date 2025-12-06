@@ -1,8 +1,12 @@
 import * as servicesCliente from "../../services/clientes.services.js"
 import * as servicesMedicamento from "../../services/medicamentos.services.js"
+import { buscarUsuariosPorEmail } from "../../services/usuarios.services.js";
 
 export function getMedicamentos(req, res) {
-    const filtros = {}; // si no hay filtros, devuelve todo
+    const filtros = {
+        usuarioId: req.usuario._id.toString(), // <--- AGREGO ESTO
+        //eliminado: { $ne: true }
+    };
 
     if (req.query.categoria) {
         filtros.categoria = req.query.categoria;
@@ -18,12 +22,10 @@ export function getMedicamentos(req, res) {
     servicesMedicamento.getMedicamentos(filtros)
         .then(medicamentos => {
             if (medicamentos.length === 0) {
-                return res.status(200).json({
-                    message: "No se encontraron medicamentos con los filtros aplicados",
-                    data: []
-                });
+                return res.status(200).json([]);
             }
-            res.status(200).json(medicamentos);
+            return res.status(200).json(medicamentos);
+
         })
         .catch(err => {
             console.error(err);
@@ -36,6 +38,7 @@ export function getMedicamentoById(req, res) {
     servicesMedicamento.getMedicamentoById(id)
         .then(medicamento => res.status(200).json(medicamento))
         .catch(err => res.status(500).json({ message: "error interno del servidor" }));
+
 }
 
 export async function getMedicamentosByCategoria(req, res) {
@@ -63,6 +66,7 @@ export function createMedicamento(req, res) {
         imagen: imagenFinal,
         link: req.body.link,
         usuarioId: req.usuario._id
+
     };
     // const clienteId = req.params.id;
     console.log("Usuario en createMedicamento:", req.usuario);
@@ -128,7 +132,7 @@ export function addClienteAMedicamento(req, res) {
 }
 export async function compartirMedicamento(req, res) {
     const medicamentoId = req.params.id;
-    const usuarioACompartir = req.body.usuarioId;
+    const email = req.body.email;
 
     try {
         const medicamento = await servicesMedicamento.getMedicamentoById(medicamentoId);
@@ -137,30 +141,43 @@ export async function compartirMedicamento(req, res) {
             return res.status(404).json({ message: "Medicamento no encontrado" });
         }
 
-        // Solo el propietario puede compartir
-        if (medicamento.usuarioId !== req.usuario._id.toString()) {
+        // Validar que el usuario autenticado sea el dueño
+        if (medicamento.usuarioId.toString() !== req.usuario._id.toString()) {
             return res.status(403).json({ message: "Solo el creador puede compartir el medicamento" });
         }
 
-        // Inicializa compartidoCon si no existe
+        // Buscar usuario por email usando tu service
+        const usuarios = await buscarUsuariosPorEmail(email);
+
+        if (usuarios.length === 0) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        const usuarioACompartir = usuarios[0]._id.toString();
+
+        // Inicializar array si no existe
         if (!medicamento.compartidoCon) {
             medicamento.compartidoCon = [];
         }
 
         // Evitar duplicados
-        if (!medicamento.compartidoCon.includes(usuarioACompartir)) {
-            medicamento.compartidoCon.push(usuarioACompartir);
+        if (medicamento.compartidoCon.includes(usuarioACompartir)) {
+            return res.status(400).json({ message: "El usuario ya tiene acceso" });
         }
 
+        medicamento.compartidoCon.push(usuarioACompartir);
+
+        // Guardar cambios
         await servicesMedicamento.editarMedicamento(medicamento, medicamentoId);
 
-        res.status(200).json({ message: "Medicamento compartido correctamente" });
+        return res.status(200).json({ message: "Medicamento compartido correctamente" });
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: "Error al compartir medicamento" });
+        return res.status(500).json({ message: "Error al compartir medicamento" });
     }
 }
+
 export async function dejarDeCompartir(req, res) {
     const medicamentoId = req.params.id;
     const usuarioId = req.params.usuarioId;
@@ -170,11 +187,15 @@ export async function dejarDeCompartir(req, res) {
 
         if (!medicamento) return res.status(404).json({ message: "Medicamento no encontrado" });
 
-        if (medicamento.usuarioId !== req.usuario._id.toString()) {
+        if (medicamento.usuarioId.toString() !== req.usuario._id.toString()) {
             return res.status(403).json({ message: "Solo el creador puede modificar los permisos" });
         }
 
-        medicamento.compartidoCon = medicamento.compartidoCon.filter(u => u !== usuarioId);
+        medicamento.compartidoCon = medicamento.compartidoCon.filter(
+            u => u._id.toString() !== usuarioId
+        );
+        medicamento.compartidoCon = medicamento.compartidoCon.map(u => u._id.toString());
+
 
         await servicesMedicamento.editarMedicamento(medicamento, medicamentoId);
 
