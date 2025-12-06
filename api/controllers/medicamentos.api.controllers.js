@@ -51,6 +51,19 @@ export async function getMedicamentosByCategoria(req, res) {
         res.status(500).json({ message: "Error al obtener medicamentos por categoría" });
     }
 }
+export async function getMedicamentosCompartidos(req, res) {
+    try {
+        const usuarioId = req.usuario._id.toString();
+        const medicamentos = await servicesMedicamento.getMedicamentosCompartidos(usuarioId);
+
+        return res.status(200).json(medicamentos);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Error al obtener los medicamentos compartidos" });
+    }
+}
+
+
 
 export function createMedicamento(req, res) {
     //recibimos los datos del body de la request y armamos un objeto

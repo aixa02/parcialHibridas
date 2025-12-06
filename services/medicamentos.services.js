@@ -52,7 +52,16 @@ export async function getMedicamentoById(id) {
 
     return medicamento;
 }
+export async function getMedicamentosCompartidos(usuarioId) {
+    await client.connect();
 
+    const filtros = {
+        compartidoCon: usuarioId, 
+        eliminado: { $ne: true }
+    };
+
+    return db.collection("medicamentos").find(filtros).toArray();
+}
 
 export async function getMedicamentosByCategoria(categoria) {
     await client.connect()

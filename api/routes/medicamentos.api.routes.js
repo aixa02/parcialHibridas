@@ -10,6 +10,8 @@ const route = express.Router()
 route.get("/", [validateToken], controllers.getMedicamentos)
 
 route.get("/categoria/:categoria", [validateToken], controllers.getMedicamentosByCategoria);
+route.get("/medicamentos_compartidos", [validateToken], controllers.getMedicamentosCompartidos);
+
 route.get("/:id", controllers.getMedicamentoById)
 route.post("/", [validateToken, validateMedicamento], controllers.createMedicamento);
 
